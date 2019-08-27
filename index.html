@@ -20,7 +20,7 @@
             <h2>{{title}}</h2>
 
             <ul>
-                <li v-for="task in tasks">{{task}}</li>
+                <li v-for="task in tasks">{{task.description}}</li>
             </ul>
 
         </div>
@@ -31,14 +31,14 @@
                 el: '#app',
                 data: {
                     title: 'To Do',
-                    task: '',
+                    task: null,
                     tasks: []
                 },
                 methods: {
                     addTask: function () {
-                        console.log(this.task);
-                        this.tasks.push(this.task);
-                        this.task = '';
+                        this.tasks.push({id: Date.now(), description: this.task, done: false});
+                        console.log('tasks', this.tasks);
+                        this.task = null;
                     }
                 }
             })
