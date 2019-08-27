@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:v-bind="http://www.w3.org/1999/xhtml" xmlns:v-on="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width-device-width">
@@ -7,18 +7,34 @@
     <title>ToDOList</title>
 </head>
 
-<body>
-    <div id="app">
+    <body>
+        <h1>To Do List</h1>
 
-    </div>
+        <div id="app">
 
-    <script>
-        new Vue({
-            el: '#app',
-            data: {
+            <input type="text" placeholder="tâche à effectuer" v-model="task"> <button v-on:click="addTask">ajouter à la liste</button>
+            <h2>{{title}}</h2>
 
-            }
-        })
-    </script>
-</body>
+        </div>
+
+        <script>
+
+            new Vue({
+                el: '#app',
+                data: {
+                    title: 'To Do',
+                    task: '',
+                    tasks: []
+                },
+                methods: {
+                    addTask: function () {
+                        console.log(this.task);
+                        this.tasks.push(this.task);
+                        this.task = '';
+                    }
+                }
+            })
+
+        </script>
+    </body>
 </html>
