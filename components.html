@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport">
+    <script src="vue2.3.3.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <title>Lifecycle hooks</title>
+</head>
+
+<body>
+
+<div id="app">
+    <global-cmp></global-cmp>
+    <my-cmp></my-cmp>
+    <my-cmp></my-cmp>
+</div>
+
+<script>
+    Vue.component('global-cmp', {
+        template: '<div>composant global</div>'
+    });
+
+    var myCmp = {
+        data: function(){
+            return {
+                randomNumber: Math.floor(Math.random() * 10)
+            }
+        },
+        template: '<p>composant local : {{randomNumber}}</p>'
+    };
+
+    var vm = new Vue({
+        el: '#app',
+        components: { 'my-cmp': myCmp}
+    })
+</script>
+</body>
+</html>
