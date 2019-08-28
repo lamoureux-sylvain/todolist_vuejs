@@ -1,9 +1,11 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:v-bind="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width-device-width">
+    <meta name="viewport">
     <script src="vue2.3.3.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <title>ToDOList</title>
 </head>
 
@@ -12,7 +14,7 @@
 
         <div id="app">
 
-            <form v-on:submit.prevent="addTask">
+            <form v-on:submit.prevent="addTask()">
                 <input type="text" placeholder="tâche à effectuer" v-model="task">
                 <button type="submit" >ajouter à la liste</button>
             </form>
@@ -20,14 +22,32 @@
             <h2>{{title}}</h2>
 
             <ul>
-                <li v-for="task in tasks">{{task.description}}</li>
+
+                <li v-for="task in tasks"
+                    v-on:click ="task.done = !task.done"
+                    v-bind:class ="{completed: task.done}">
+
+                        <span v-if="!task.isInEditMode">
+                            <i class="fa fa-edit" v-on:click="switchMode(task)"></i>
+                            {{task.description}}
+                            <i class="fa fa-trash-o" v-on:click="deleteTask(task)"></i>
+                        </span>
+
+                        <span v-else>
+                            <i class="fa fa-thumbs-o-up" v-on:click="switchMode(task)"></i>
+                            <input type="text"
+                                   v-on:keyup.enter="switchMode(task)"
+                                   v-model="task.description">
+                        </span>
+
+                </li>
+
             </ul>
 
         </div>
-
         <script>
 
-            new Vue({
+            var vm = new Vue({
                 el: '#app',
                 data: {
                     title: 'To Do',
@@ -37,8 +57,16 @@
                 methods: {
                     addTask: function () {
                         this.tasks.push({id: Date.now(), description: this.task, done: false});
-                        console.log('tasks', this.tasks);
                         this.task = null;
+                    },
+                    switchMode: function (task){
+                        task.isInEditMode = !task.isInEditMode;
+                        console.log(task.isInEditMode);
+                    },
+                    deleteTask: function (task){
+                        this.tasks = this.tasks.filter(function(t){
+                           return t.id !== task.id;
+                        });
                     }
                 }
             })
