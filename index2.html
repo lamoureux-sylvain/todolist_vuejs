@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport">
+    <script src="vue2.3.3.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <title>Lifecycle hooks</title>
+</head>
+
+<body>
+<h1>Lifecycle hooks</h1>
+
+<div id="app">
+    <h2>Utilisateurs</h2>
+    <ul>
+        <li v-for="user in users">{{user.username}}</li>
+    </ul>
+</div>
+<script>
+    var vm = new Vue({
+        el: '#app',
+        data: {
+            title: 'Lifecycle hooks',
+            usersUrl: 'https://jsonplaceholder.typicode.com/users',
+            users: []
+        },
+        created: function() {
+            axios.get(this.usersUrl)
+                 .then(function(response) {
+                     vm.users = response.data;
+                 })
+        }
+    })
+</script>
+</body>
+</html>
