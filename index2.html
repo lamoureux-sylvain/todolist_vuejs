@@ -14,31 +14,47 @@
 <h1>Lifecycle hooks</h1>
 
 <div id="app">
-    <h2>Utilisateurs</h2>
+
     <hr>
     <my-card>
-        <h3 slot="cardheader">Blog vue JS</h3>
+        <h2 slot="cardheader">Blog vue JS</h2>
         <div slot="cardbody">visitez meanjs.fr</div>
     </my-card>
     <hr>
 
+    <h3>Utilisateurs</h3>
+
     <ul>
-        <user-list v-bind:data ="users"></user-list>
+        <user-list v-bind:data ="users" v-bind:users-coming="usersComing"></user-list>
     </ul>
+    <div v-for="user in usersComing">
+        {{user.email}} - {{users.username}}
+    </div>
 </div>
+
 <script>
     Vue.component('my-card', {
         template: '<div><slot name="cardheader"> titre par défaut </slot><slot name="cardbody"> contenu par défaut </slot></div>'
     });
 
     Vue.component('user-list',{
-        template: '<div><ul><li v-for="user in data"><user-details v-bind:usr="user"></user-details></li></ul></div>',
-        props: ['data']
+        template: '<div><ul><li v-for="user in data"><user-details v-bind:usr="user" v-on:accept="registerUser(user)"></user-details></li></ul></div>',
+        props: ['data', 'usersComing'],
+        methods: {
+            registerUser: function(user) {
+                this.usersComing.push(user);
+            }
+        }
     });
 
     Vue.component('user-details',{
-        template: '<div>nom: {{usr.username}}, ville: {{usr.address.city}}, email: {{usr.email}}</div>',
-        props: ['usr']
+        template: '<div>nom: {{usr.username}}, ville: {{usr.address.city}}, email: {{usr.email}}<button v-on:click="acceptInvitation">accepter</button></div>',
+        props: ['usr'],
+        methods: {
+            acceptInvitation: function() {
+                this.$emit('accept');
+            }
+        }
     });
 
     var vm = new Vue({
@@ -46,7 +62,8 @@
         data: {
             title: 'Lifecycle hooks',
             usersUrl: 'https://jsonplaceholder.typicode.com/users',
-            users: []
+            users: [],
+            usersComing: []
         },
         created: function() {
             axios.get(this.usersUrl)
